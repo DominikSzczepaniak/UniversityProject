@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:sharpnado="clr-namespace:Sharpnado.Presentation.Forms;assembly=Sharpnado.Presentation.Forms"
+             x:Class="University.MainPage">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+         <SearchBar  Placeholder="Wpisz nazwę studenta, rok, nazwę przedmiotu" TextChanged="SearchBarChanged" HorizontalOptions="FillAndExpand"
+                            Grid.ColumnSpan="2"
+                            BackgroundColor="White"
+                            TextColor="Green"
+                            PlaceholderColor="Grey"/>
+        <!--<HorizontalStackLayout Margin = "20" HeightRequest = "100" Grid.Row="0" HorizontalOptions="FillAndExpand">
+            <SearchBar  Placeholder="Search bar"
+                        TextChanged="SearchBarChanged"
+                        HorizontalOptions="FillAndExpand"/>
+        </HorizontalStackLayout>-->
+        <!-- Lewe pole -->
+        <StackLayout Grid.Column="0" Grid.Row="1">
+                <Label Text="TODO: UraniumUI TreeView library"
+                       SemanticProperties.HeadingLevel="Level1"
+                       FontSize="32" />
+
+                <!-- <sharpnado:TreeView>
+                    <sharpnado:TreeView.RootNodes>
+                         Węzły dla roczników 
+                        <sharpnado:TreeNode Text="Rocznie" ItemsSource="{Binding Years}">
+                            <sharpnado:TreeNode.ItemTemplate>
+                                <DataTemplate>
+                                    <sharpnado:TreeNode Text="{Binding rok}" Command="{Binding YearSelectedCommand}" CommandParameter="{Binding id}">
+                                         Węzły dla wykładów 
+                                        <sharpnado:TreeNode Text="Wykłady" ItemsSource="{Binding Source={RelativeSource TemplatedParent}, Path=BindingContext.Lectures}">
+                                            <sharpnado:TreeNode.ItemTemplate>
+                                                <DataTemplate>
+                                                    <sharpnado:TreeNode Text="{Binding nazwa}" Command="{Binding LectureSelectedCommand}" CommandParameter="{Binding id}">
+                                                         Węzły dla studentów 
+                                                        <sharpnado:TreeNode Text="Studenci" ItemsSource="{Binding Source={RelativeSource TemplatedParent}, Path=BindingContext.Students}">
+                                                            <sharpnado:TreeNode.ItemTemplate>
+                                                                <DataTemplate>
+                                                                    <sharpnado:TreeNode Text="{Binding nazwisko}" Command="{Binding StudentSelectedCommand}" CommandParameter="{Binding id}" />
+                                                                </DataTemplate>
+                                                            </sharpnado:TreeNode.ItemTemplate>
+                                                        </sharpnado:TreeNode>
+                                                    </sharpnado:TreeNode>
+                                                </DataTemplate>
+                                            </sharpnado:TreeNode.ItemTemplate>
+                                        </sharpnado:TreeNode>
+                                    </sharpnado:TreeNode>
+                                </DataTemplate>
+                            </sharpnado:TreeNode.ItemTemplate>
+                        </sharpnado:TreeNode>
+                    </sharpnado:TreeView.RootNodes>
+                </sharpnado:TreeView> -->
+
+        </StackLayout>
+
+        <!-- Prawe pole -->
+        <StackLayout Grid.Column="1" Grid.Row="1">
+            <ListView x:Name="StudentList" SizeChanged="StudentList_SizeChanged"/>
+            <ListView x:Name="YearsList" SizeChanged="YearsList_SizeChanged"/>
+            <ListView x:Name="LectureList" SizeChanged="LectureList_SizeChanged"/>
+        </StackLayout>
+    </Grid>
+
+</ContentPage>
+
+<!-- Layout -->
+<!-- SEARCH BAR TEXT                       LIST OF CHOOSE-->
+<!-- Tree                                          List  -->
+<!-- Tree                                          List  -->
+<!-- Tree                                          List  -->
+<!-- Tree                                          List  -->
+<!-- Tree                                          List  -->
+<!-- AddStudent_button AddYear_button AddLecture_button  -->
