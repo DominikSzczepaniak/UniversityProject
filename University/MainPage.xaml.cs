@@ -25,77 +25,182 @@ public partial class MainPage : ContentPage
     public ObservableCollection<Student> Students { get; set; }
     public ObservableCollection<Year> Years { get; set; }
     public ObservableCollection<Lecture> Lectures { get; set; }
-
     public MainPage()
     {
+
+        DatabaseHandler dbh = new DatabaseHandler();
         InitializeComponent();
-        //DatabaseHandler dbh = new DatabaseHandler();  
-        //List<Student> students = DatabaseHandler.GetStudents(); 
-        //List<Year> years = DatabaseHandler.GetYears();
-        //List<Lecture> lectures = DatabaseHandler.GetLectures();
-        //Students = new ObservableCollection<Student>(students);
-        //Years = new ObservableCollection<Year>(years);
-        //Lectures = new ObservableCollection<Lecture>(lectures);
 
-        //StudentList.ItemsSource = Students;
-        //StudentList.ItemTemplate = new DataTemplate(() =>
-        //{
-        //    var textCell = new TextCell();
-        //    textCell.SetBinding(TextCell.TextProperty, "imie");
-        //    return textCell;
-        //});
-        //YearsList.ItemsSource = Years;
-        //YearsList.ItemTemplate = new DataTemplate(() =>
-        //{
-        //    var textCell = new TextCell();
-        //    textCell.SetBinding(TextCell.TextProperty, "rok");
-        //    return textCell;
-        //});
-        //LectureList.ItemsSource = Lectures;
-        //LectureList.ItemTemplate = new DataTemplate(() =>
-        //{
-        //    var textCell = new TextCell();
-        //    textCell.SetBinding(TextCell.TextProperty, "nazwa");
-        //    return textCell;
-        //});
-
-    }
-
-    private void StudentList_SizeChanged(object sender, EventArgs e)
-    {
-        var listview = (ListView)sender;
-        var stackLayout = (StackLayout)listview.Parent;
-        var grid = (Grid)stackLayout.Parent;
-        var availableHeight = grid.Height;
-        listview.HeightRequest = availableHeight * 0.3;
-    }
-
-    private void YearsList_SizeChanged(object sender, EventArgs e)
-    {
-        var listview = (ListView)sender;
-        var stackLayout = (StackLayout)listview.Parent;
-        var grid = (Grid)stackLayout.Parent;
-        var availableHeight = grid.Height;
-        listview.HeightRequest = availableHeight * 0.3;
-    }
-
-    private void LectureList_SizeChanged(object sender, EventArgs e)
-    {
-        var listview = (ListView)sender;
-        var stackLayout = (StackLayout)listview.Parent;
-        var grid = (Grid)stackLayout.Parent;
-        var availableHeight = grid.Height;
-        listview.HeightRequest = availableHeight * 0.4;
     }
     private void SearchBarChanged(object sender, EventArgs e)
     {
         int i = 0;
     }
+    private void DataSelectorChanged(object sender, EventArgs e)
+    {
+        SecondList.IsVisible = false;
+        ThirdList.IsVisible = false;
+        SecondColumn.Text = "";
+        ThirdColumn.Text = "";
+        var selectedIndex = DataSelector.SelectedIndex;
+        switch (selectedIndex)
+        {
+            case 0:
+                List<Student> students = DatabaseHandler.GetStudents();
+                Students = new ObservableCollection<Student>(students);
+                FirstList.ItemsSource = Students;
+                FirstList.ItemTemplate = new DataTemplate(() =>
+                {
+                    var textCell = new TextCell();
+                    textCell.SetBinding(TextCell.TextProperty, "nazwisko");
+                    textCell.SetBinding(TextCell.DetailProperty, "imie");
+                    return textCell;
+                });
+                break;
+            case 1:
+                List<Year> years = DatabaseHandler.GetYears();
+                Years = new ObservableCollection<Year>(years);
+                FirstList.ItemsSource = Years;
+                FirstList.ItemTemplate = new DataTemplate(() =>
+                {
+                    var textCell = new TextCell();
+                    textCell.SetBinding(TextCell.TextProperty, "rok");
+                    return textCell;
+                });
+                break;
+            case 2:
+                List<Lecture> lectures = DatabaseHandler.GetLectures();
+                Lectures = new ObservableCollection<Lecture>(lectures);
+                FirstList.ItemsSource = Lectures;
+                FirstList.ItemTemplate = new DataTemplate(() =>
+                {
+                    var textCell = new TextCell();
+                    textCell.SetBinding(TextCell.TextProperty, "nazwa");
+                    return textCell;
+                });
+                break;
+        }
+    }
+    private void FirstListItemSelected(object sender, EventArgs e)
+    {
+        SecondList.IsVisible = false;
+        ThirdList.IsVisible = false;
+        SecondColumn.Text = "";
+        ThirdColumn.Text = "";
+        var selectedItem = DataSelector.SelectedItem as string;
+        if(selectedItem == "Student")
+        {
+            Student selectedStudent = FirstList.SelectedItem as Student;
+            //open window with details about student
+        }
+        else if (selectedItem == "Rok")
+        {
+            Year selectedYear = FirstList.SelectedItem as Year;
+            List<Lecture> lectures = DatabaseHandler.GetLecturesByYear(selectedYear.rok);
+            if (lectures.Count == 0)
+            {
+                Application.Current.MainPage.DisplayAlert("Alert", "Brak rekordów", "OK");
+                return;
+            }
+            SecondList.ItemsSource = new ObservableCollection<Lecture>(lectures);
+            SecondList.ItemTemplate = new DataTemplate(() =>
+            {
+                var textCell = new TextCell();
+                textCell.SetBinding(TextCell.TextProperty, "nazwa");
+                return textCell;
+            });
+            SecondColumn.Text = "Przedmioty";
+            SecondList.IsVisible = true;
+        }
+        else if (selectedItem == "Przedmiot")
+        {
+            Lecture selectedLecture = FirstList.SelectedItem as Lecture;
+            List<Year> years = DatabaseHandler.GetYearsByLecture(selectedLecture.nazwa);
+            if (years.Count == 0)
+            {
+                Application.Current.MainPage.DisplayAlert("Alert", "Brak rekordów", "OK");
+                return;
+            }
+            SecondList.ItemsSource = new ObservableCollection<Year>(years);
+            SecondList.ItemTemplate = new DataTemplate(() =>
+            {
+                var textCell = new TextCell();
+                textCell.SetBinding(TextCell.TextProperty, "rok");
+                return textCell;
+            });
+            SecondColumn.Text = "Lata";
+            SecondList.IsVisible = true;
+        }
+    }
+    private void SecondListItemSelected(object sender, EventArgs e)
+    {
+        ThirdList.IsVisible=false;
+        ThirdColumn.Text = "";
+        var selectedItem = DataSelector.SelectedItem as string;
+        if (selectedItem == "Rok")
+        {
+            Year selectedYear = FirstList.SelectedItem as Year;
+            Lecture selectedLecture = SecondList.SelectedItem as Lecture;
+            List<Student> students = DatabaseHandler.GetStudentsByYearAndLecture(selectedYear.rok, selectedLecture.nazwa);
+            if (students.Count == 0)
+            {
+                Application.Current.MainPage.DisplayAlert("Alert", "Brak rekordów", "OK");
+                return;
+            }
+            ThirdList.ItemsSource = new ObservableCollection<Student>(students);
+            ThirdList.ItemTemplate = new DataTemplate(() =>
+            {
+                var textCell = new TextCell();
+                textCell.SetBinding(TextCell.TextProperty, "nazwisko");
+                textCell.SetBinding(TextCell.DetailProperty, "imie");
+                return textCell;
+            });
+            ThirdColumn.Text = "Studenci";
+            ThirdList.IsVisible = true;
+
+        }
+        else if (selectedItem == "Przedmiot")
+        {
+            Year selectedYear = SecondList.SelectedItem as Year;
+            Lecture selectedLecture = FirstList.SelectedItem as Lecture;
+            List<Student> students = DatabaseHandler.GetStudentsByYearAndLecture(selectedYear.rok, selectedLecture.nazwa);
+            if (students.Count == 0)
+            {
+                Application.Current.MainPage.DisplayAlert("Alert", "Brak rekordów", "OK");
+                return;
+            }
+            ThirdList.ItemsSource = new ObservableCollection<Student>(students);
+            ThirdList.ItemTemplate = new DataTemplate(() =>
+            {
+                var textCell = new TextCell();
+                textCell.SetBinding(TextCell.TextProperty, "nazwisko");
+                textCell.SetBinding(TextCell.DetailProperty, "imie");
+                return textCell;
+            });
+            ThirdColumn.Text = "Studenci";
+            ThirdList.IsVisible = true;
+        }
+    }
+
+    private void ThirdListItemSelected(Object sender, EventArgs e)
+    {
+        //open window
+    }
+
+    void StudentAdd_Clicked(System.Object sender, System.EventArgs e)
+    {
+    }
+    void YearAdd_Clicked(System.Object sender, System.EventArgs e)
+    {
+    }
+    void LectureAdd_Clicked(System.Object sender, System.EventArgs e)
+    {
+    }
 }
 
 public class Student
 {
-    private int id { get; set;  }
+    public int id { get; set;  }
 	public string imie { get; set; }
     public string nazwisko { get; set; }
     public DateTime data_urodzenia  { get; set; }
@@ -103,14 +208,14 @@ public class Student
 
 public class Year
 {
-    private int id { get; set; }
+    public int id { get; set; }
     public int rok { get; set; }
     public int id_studenta { get; set; }
 }
 
 public class Lecture
 {
-    private int id { get; set; }
+    public int id { get; set; }
     public string tag { get; set; }
     public string nazwa { get; set; }
     public int rok { get; set; }
@@ -128,7 +233,7 @@ public class DatabaseHandler
     private static NpgsqlConnection connection;
     public DatabaseHandler()
     {
-        var cs = "Host=localhost;Port=5432;Username=myuser;database=ProjektDB";
+        var cs = "Host=localhost;Port=5432;Username=myuser;database=ProjectDB";
         try
         {
             connection = new NpgsqlConnection(cs);
@@ -148,8 +253,8 @@ public class DatabaseHandler
             return;
         }
         string CreateStudentQuery = "CREATE TABLE student(id SERIAL PRIMARY KEY, imie varchar(50), nazwisko varchar(50), data_urodzenia DATE)";
-        string CreateYearQuery = "CREATE TABLE year(id SERIAL PRIMARY KEY, rok INT, id_studenta INT REFERENCES student(id))";
-        string CreateLectureQuery = "CREATE TABLE lecture(id SERIAL PRIMARY KEY, tag varchar(5), nazwa varchar(50), rok INT REFERENCES year(rok), id_studenta INT REFERENCES student(id)";
+        string CreateYearQuery = "CREATE TABLE year(rok INT PRIMARY KEY, id_studenta INT REFERENCES student(id))";
+        string CreateLectureQuery = "CREATE TABLE lecture(id SERIAL PRIMARY KEY, tag varchar(5), nazwa varchar(50), rok INT REFERENCES year(rok), id_studenta INT REFERENCES student(id))";
         connection.ExecuteScalar(CreateStudentQuery, new { });
         connection.ExecuteScalar(CreateYearQuery, new { });
         connection.ExecuteScalar(CreateLectureQuery, new { });
@@ -241,6 +346,12 @@ public class DatabaseHandler
         string GetLecturesByYearQuery = "SELECT * FROM lecture WHERE rok = @rok";
         return connection.Query<Lecture>(GetLecturesByYearQuery, new { rok = rok }).ToList();
     }
+    public static List<Student> GetStudentsByYearAndLecture(int rok, string nazwa)
+    {
+        string GetStudentsByYearAndLectureQuery = "SELECT * FROM student WHERE id IN (SELECT id_studenta FROM lecture WHERE rok = @rok AND nazwa = @nazwa)";
+        return connection.Query<Student>(GetStudentsByYearAndLectureQuery, new { rok = rok, nazwa = nazwa }).ToList();
+    }
     
 }
+
 

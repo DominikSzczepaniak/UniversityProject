@@ -1,81 +1,78 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:sharpnado="clr-namespace:Sharpnado.Presentation.Forms;assembly=Sharpnado.Presentation.Forms"
+             xmlns:controls="clr-namespace:Microsoft.Maui.Controls;assembly=Microsoft.Maui.Controls"
              x:Class="University.MainPage">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
             <ColumnDefinition />
+            <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
          <SearchBar  Placeholder="Wpisz nazwę studenta, rok, nazwę przedmiotu" TextChanged="SearchBarChanged" HorizontalOptions="FillAndExpand"
-                            Grid.ColumnSpan="2"
+                            Grid.Row="0"
+                            Grid.ColumnSpan="3"
                             BackgroundColor="White"
                             TextColor="Green"
                             PlaceholderColor="Grey"/>
-        <!--<HorizontalStackLayout Margin = "20" HeightRequest = "100" Grid.Row="0" HorizontalOptions="FillAndExpand">
-            <SearchBar  Placeholder="Search bar"
-                        TextChanged="SearchBarChanged"
-                        HorizontalOptions="FillAndExpand"/>
-        </HorizontalStackLayout>-->
-        <!-- Lewe pole -->
-        <StackLayout Grid.Column="0" Grid.Row="1">
-                <Label Text="TODO: UraniumUI TreeView library"
-                       SemanticProperties.HeadingLevel="Level1"
-                       FontSize="32" />
+        <StackLayout Grid.Row="1" Grid.Column="0">
+            
+            <controls:Picker Title="Wybierz"
+                                x:Name="DataSelector"
+                                SelectedIndexChanged="DataSelectorChanged"
+                                IsVisible="true"
+                                HorizontalTextAlignment="Center">
+                <controls:Picker.ItemsSource>
+                    <x:Array Type="{x:Type x:String}">
+                        <x:String>Student</x:String>
+                        <x:String>Rok</x:String>
+                        <x:String>Przedmiot</x:String>
+                    </x:Array>
+                </controls:Picker.ItemsSource>
+            </controls:Picker>
+        </StackLayout>
+        <Button Grid.Row="1" Grid.Column="1" Text="" x:Name="SecondColumn" BackgroundColor="White" TextColor="Black" BorderWidth="0.8" BorderColor="#D7D7D7">
+        </Button>
+        <Button Grid.Row="1" Grid.Column="2" Text="" x:Name="ThirdColumn" BackgroundColor="White" TextColor="Black" BorderWidth="0.8" BorderColor="#D7D7D7">
+        </Button>
 
-                <!-- <sharpnado:TreeView>
-                    <sharpnado:TreeView.RootNodes>
-                         Węzły dla roczników 
-                        <sharpnado:TreeNode Text="Rocznie" ItemsSource="{Binding Years}">
-                            <sharpnado:TreeNode.ItemTemplate>
-                                <DataTemplate>
-                                    <sharpnado:TreeNode Text="{Binding rok}" Command="{Binding YearSelectedCommand}" CommandParameter="{Binding id}">
-                                         Węzły dla wykładów 
-                                        <sharpnado:TreeNode Text="Wykłady" ItemsSource="{Binding Source={RelativeSource TemplatedParent}, Path=BindingContext.Lectures}">
-                                            <sharpnado:TreeNode.ItemTemplate>
-                                                <DataTemplate>
-                                                    <sharpnado:TreeNode Text="{Binding nazwa}" Command="{Binding LectureSelectedCommand}" CommandParameter="{Binding id}">
-                                                         Węzły dla studentów 
-                                                        <sharpnado:TreeNode Text="Studenci" ItemsSource="{Binding Source={RelativeSource TemplatedParent}, Path=BindingContext.Students}">
-                                                            <sharpnado:TreeNode.ItemTemplate>
-                                                                <DataTemplate>
-                                                                    <sharpnado:TreeNode Text="{Binding nazwisko}" Command="{Binding StudentSelectedCommand}" CommandParameter="{Binding id}" />
-                                                                </DataTemplate>
-                                                            </sharpnado:TreeNode.ItemTemplate>
-                                                        </sharpnado:TreeNode>
-                                                    </sharpnado:TreeNode>
-                                                </DataTemplate>
-                                            </sharpnado:TreeNode.ItemTemplate>
-                                        </sharpnado:TreeNode>
-                                    </sharpnado:TreeNode>
-                                </DataTemplate>
-                            </sharpnado:TreeNode.ItemTemplate>
-                        </sharpnado:TreeNode>
-                    </sharpnado:TreeView.RootNodes>
-                </sharpnado:TreeView> -->
-
+         <!--Lewe pole--> 
+        <StackLayout Grid.Column="0" Grid.Row="2">
+            <ListView x:Name="FirstList" ItemSelected="FirstListItemSelected"/>
+        </StackLayout>
+         <!--Srodkowe pole--> 
+        <StackLayout Grid.Column="1" Grid.Row="2">
+            <ListView x:Name="SecondList" IsVisible="false" ItemSelected="SecondListItemSelected"/>
         </StackLayout>
 
-        <!-- Prawe pole -->
-        <StackLayout Grid.Column="1" Grid.Row="1">
-            <ListView x:Name="StudentList" SizeChanged="StudentList_SizeChanged"/>
-            <ListView x:Name="YearsList" SizeChanged="YearsList_SizeChanged"/>
-            <ListView x:Name="LectureList" SizeChanged="LectureList_SizeChanged"/>
+         <!--Prawe pole--> 
+        <StackLayout Grid.Column="2" Grid.Row="2">
+            <ListView x:Name="ThirdList" IsVisible="false" ItemSelected="ThirdListItemSelected"/>
         </StackLayout>
+
+        <Button x:Name="StudentAdd" Text="Dodaj studenta" Clicked="StudentAdd_Clicked" Grid.Row="3"  Grid.Column="0" VerticalOptions="End" >
+        </Button>
+        <Button x:Name="YearAdd" Text="Dodaj rok" Clicked="YearAdd_Clicked" Grid.Row="3" Grid.Column="1" VerticalOptions="End" >
+        </Button>
+        <Button x:Name="LectureAdd" Text="Dodaj przedmiot" Clicked="LectureAdd_Clicked" Grid.Row="3" Grid.Column="2" VerticalOptions="End" >
+        </Button>
     </Grid>
 
 </ContentPage>
 
 <!-- Layout -->
-<!-- SEARCH BAR TEXT                       LIST OF CHOOSE-->
-<!-- Tree                                          List  -->
-<!-- Tree                                          List  -->
-<!-- Tree                                          List  -->
-<!-- Tree                                          List  -->
-<!-- Tree                                          List  -->
-<!-- AddStudent_button AddYear_button AddLecture_button  -->
+<!-- SEARCH BAR TEXT                                                                  -->
+<!-- List of year   ListofLectureAfterYearChoose      ListOfStudentsAfterLectureChoose-->
+<!-- List of year   ListofLectureAfterYearChoose      ListOfStudentsAfterLectureChoose-->
+<!-- List of year   ListofLectureAfterYearChoose      ListOfStudentsAfterLectureChoose-->
+<!-- List of year   ListofLectureAfterYearChoose      ListOfStudentsAfterLectureChoose-->
+<!-- List of year   ListofLectureAfterYearChoose      ListOfStudentsAfterLectureChoose-->
+<!-- List of year   ListofLectureAfterYearChoose      ListOfStudentsAfterLectureChoose-->
+<!-- AddStudent_button AddYear_button AddLecture_button                               -->
+<!-- Guziki zrobić po boku zamiast na dole.-->
