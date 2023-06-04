@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="University.AddStudentForm"
+             Title="AddStudentForm">
+    <StackLayout Padding="20">
+        <Entry x:Name="firstNameEntry" Placeholder="Imię" />
+        <Entry x:Name="lastNameEntry" Placeholder="Nazwisko" />
+        <DatePicker x:Name="birthDatePicker" />
+        <Button x:Name="confirmButton" Text="Potwierdź" Clicked="ConfirmButton_Clicked" />
+    </StackLayout>
+</ContentPage>

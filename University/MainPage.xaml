@@ -48,7 +48,8 @@
         </StackLayout>
          <!--Srodkowe pole--> 
         <StackLayout Grid.Column="1" Grid.Row="2">
-            <ListView x:Name="SecondList" IsVisible="false" ItemSelected="SecondListItemSelected"/>
+            <ListView x:Name="SecondList" IsVisible="false" ItemSelected="SecondListItemSelected" />
+            
         </StackLayout>
 
          <!--Prawe pole--> 
