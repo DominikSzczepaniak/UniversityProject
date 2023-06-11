@@ -4,12 +4,7 @@ using Dapper;
 namespace University;
 
 //TODO:
-// 4. Search bar that will search for students/years/lectures and show scrolling list under search bar
-// 6. On click on student/year/lecture show details about it with option to edit it or delete it
-// 7. Make checker with edit / delete options. If delete is ON and we click anything on the list ask user if he wants to delete, if yes
-// then delete.
-// If we got an edit checker ON then open window with options to edit.
-// Of course both cannot be ON at the same time
+// 1. Check for duplicates in main lists (this file), and repair showing next lists and it's done.
 
 public partial class MainPage : ContentPage
 {
@@ -25,10 +20,6 @@ public partial class MainPage : ContentPage
         DatabaseHandler dbh = new DatabaseHandler();
         InitializeComponent();
 
-    }
-    private void SearchBarChanged(object sender, EventArgs e)
-    {
-        int i = 0;
     }
     private void DataSelectorChanged(object sender, EventArgs e)
     {
@@ -53,7 +44,7 @@ public partial class MainPage : ContentPage
                 break;
             case 1:
                 List<Year> years = DatabaseHandler.GetYears();
-                Years = new ObservableCollection<Year>(years);
+                Years = new ObservableCollection<Year>(years.DistinctBy(p=>p.rok));
                 FirstList.ItemsSource = Years;
                 FirstList.ItemTemplate = new DataTemplate(() =>
                 {
@@ -64,7 +55,7 @@ public partial class MainPage : ContentPage
                 break;
             case 2:
                 List<Lecture> lectures = DatabaseHandler.GetLectures();
-                Lectures = new ObservableCollection<Lecture>(lectures);
+                Lectures = new ObservableCollection<Lecture>(lectures.DistinctBy(p=>p.nazwa));
                 FirstList.ItemsSource = Lectures;
                 FirstList.ItemTemplate = new DataTemplate(() =>
                 {
@@ -89,6 +80,12 @@ public partial class MainPage : ContentPage
         await Navigation.PushAsync(a1);
         
     }
+    private async void openStudentInfo(Student student)
+    {
+        var a1 = new StudentInfo();
+        a1.getData(student);
+        await Navigation.PushAsync(a1);
+    }
     private void FirstListItemSelected(object sender, EventArgs e)
     {
         SecondList.IsVisible = false;
@@ -100,7 +97,7 @@ public partial class MainPage : ContentPage
         {
             if (selectedItem == "Student")
             {
-                //open window
+                openStudentInfo(FirstList.SelectedItem as Student);
             }
             else if (selectedItem == "Przedmiot")
             {
@@ -118,12 +115,17 @@ public partial class MainPage : ContentPage
             if (selectedItem == "Przedmiot")
             {
                 var lect = FirstList.SelectedItem as Lecture;
-                DatabaseHandler.DeleteLecture(lect.id);
+                DatabaseHandler.DeleteLectureByNazwa(lect.nazwa);
             }
             else if (selectedItem == "Rok")
             {
                 var year = FirstList.SelectedItem as Year;
-                DatabaseHandler.DeleteYear(year.rok);
+                DatabaseHandler.DeleteYearByRok(year.rok);
+            }
+            else if(selectedItem == "Student")
+            {
+                var student = FirstList.SelectedItem as Student;
+                DatabaseHandler.DeleteStudent(student.id);
             }
             DataSelectorChanged(sender, e);
             return;
@@ -131,18 +133,19 @@ public partial class MainPage : ContentPage
         if (selectedItem == "Student")
         {
             Student selectedStudent = FirstList.SelectedItem as Student;
-            //open window with details about student
+            openStudentInfo(selectedStudent);
         }
         else if (selectedItem == "Rok")
         {
             Year selectedYear = FirstList.SelectedItem as Year;
-            List<Lecture> lectures = DatabaseHandler.GetLecturesByYear(selectedYear.rok);
+            List<Lecture> lectures = DatabaseHandler.GetLecturesByRok(selectedYear.rok);
+            
             if (lectures.Count == 0)
             {
                 Application.Current.MainPage.DisplayAlert("Alert", "Brak rekordów", "OK");
                 return;
             }
-            SecondList.ItemsSource = new ObservableCollection<Lecture>(lectures);
+            SecondList.ItemsSource = new ObservableCollection<Lecture>(lectures.DistinctBy(p=>p.nazwa));
             SecondList.ItemTemplate = new DataTemplate(() =>
             {
                 var textCell = new TextCell();
@@ -161,7 +164,7 @@ public partial class MainPage : ContentPage
                 Application.Current.MainPage.DisplayAlert("Alert", "Brak rekordów", "OK");
                 return;
             }
-            SecondList.ItemsSource = new ObservableCollection<Year>(years);
+            SecondList.ItemsSource = new ObservableCollection<Year>(years.DistinctBy(p=>p.rok));
             SecondList.ItemTemplate = new DataTemplate(() =>
             {
                 var textCell = new TextCell();
@@ -195,12 +198,12 @@ public partial class MainPage : ContentPage
             {
                 //usun rok
                 var year = SecondList.SelectedItem as Year;
-                DatabaseHandler.DeleteYear(year.rok);
+                DatabaseHandler.DeleteYearByRok(year.rok);
             }
             else if (selectedItem == "Rok")
             {
                 var lect = SecondList.SelectedItem as Lecture;
-                DatabaseHandler.DeleteYear(lect.id);
+                DatabaseHandler.DeleteLectureByNazwa(lect.nazwa);
             }
             FirstListItemSelected(sender, e);
             return;
@@ -209,7 +212,7 @@ public partial class MainPage : ContentPage
         {
             Year selectedYear = FirstList.SelectedItem as Year;
             Lecture selectedLecture = SecondList.SelectedItem as Lecture;
-            List<Student> students = DatabaseHandler.GetStudentsByYearAndLecture(selectedYear.rok, selectedLecture.nazwa);
+            List<Student> students = DatabaseHandler.GetStudentsByNazwaAndRok(selectedLecture.nazwa, selectedYear.rok);
             if (students.Count == 0)
             {
                 Application.Current.MainPage.DisplayAlert("Alert", "Brak rekordów", "OK");
@@ -231,7 +234,7 @@ public partial class MainPage : ContentPage
         {
             Year selectedYear = SecondList.SelectedItem as Year;
             Lecture selectedLecture = FirstList.SelectedItem as Lecture;
-            List<Student> students = DatabaseHandler.GetStudentsByYearAndLecture(selectedYear.rok, selectedLecture.nazwa);
+            List<Student> students = DatabaseHandler.GetStudentsByNazwaAndRok(selectedLecture.nazwa, selectedYear.rok);
             if (students.Count == 0)
             {
                 Application.Current.MainPage.DisplayAlert("Alert", "Brak rekordów", "OK");
@@ -252,7 +255,7 @@ public partial class MainPage : ContentPage
 
     private void ThirdListItemSelected(Object sender, EventArgs e)
     {
-        //open window
+        openStudentInfo(ThirdList.SelectedItem as Student);
     }
 
     async void StudentAdd_Clicked(System.Object sender, System.EventArgs e)
@@ -305,8 +308,13 @@ public class Lecture
     public int id { get; set; }
     public string tag { get; set; }
     public string nazwa { get; set; }
-    public int rok { get; set; }
+    public int id_roku { get; set; }
     public int id_studenta { get; set; }
+    public int rok {get; set;}
+    public void getRok()
+    {
+        rok = DatabaseHandler.GetRokByRokId(id_roku);
+    }
 }
 
 

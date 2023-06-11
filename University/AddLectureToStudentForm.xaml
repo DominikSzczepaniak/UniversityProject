@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="University.AddLectureToStudentForm"
+             Title="AddLectureToStudentForm">
+    <StackLayout Padding="20">
+        <Label Text="Dodawanie przedmiotu dla studenta" FontSize="20" HorizontalOptions="Center"/>
+
+        <Label Text="Student:"  />
+        <Label x:Name="StudentName" Text="Student"/>
+
+        <Label Text="Rok:"/>
+        <Picker x:Name="RokPicker"/>
+
+        <Label Text="Nazwa:"></Label>
+        <Picker x:Name="NazwaPicker"></Picker>
+
+        <Button Text="Potwierdź" Clicked="PotwierdzButton_Clicked"/>
+    </StackLayout>
+</ContentPage>

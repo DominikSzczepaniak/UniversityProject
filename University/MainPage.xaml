@@ -15,12 +15,6 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <SearchBar  Placeholder="Wpisz nazwę studenta, rok, nazwę przedmiotu" TextChanged="SearchBarChanged" HorizontalOptions="FillAndExpand"
-                        Grid.Row="0"
-                        Grid.ColumnSpan="3"
-                        BackgroundColor="White"
-                        TextColor="Green"
-                        PlaceholderColor="Grey"/>
         <StackLayout Grid.Row="1" Grid.ColumnSpan="3" Orientation="Horizontal">
             <StackLayout HorizontalOptions="StartAndExpand" Margin="280, 0">
                 <CheckBox x:Name="EditRadioButton" CheckedChanged="CheckBox_CheckedChanged"/>

@@ -1,12 +1,62 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+<TabbedPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="University.StudentInfo"
              Title="StudentInfo">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
-</ContentPage>
+    <TabbedPage.Children>
+        <ContentPage Title="Informacje">
+            <StackLayout>
+                <Label Text="Imię" />
+                <Entry x:Name="firstNameEntry" TextChanged="FirstNameEntry_TextChanged" />
+
+                <Label Text="Nazwisko" />
+                <Entry x:Name="lastNameEntry" TextChanged="LastNameEntry_TextChanged" />
+
+                <Label Text="Data urodzenia" />
+                <DatePicker x:Name="birthdatePicker" DateSelected="BirthdatePicker_DateSelected" />
+            </StackLayout>
+        </ContentPage>
+
+        <ContentPage Title="Lata">
+            <StackLayout>
+            <Button Text="DODAJ ROK" FontSize="Header" Clicked="AddYearButton" HorizontalOptions="Fill" BackgroundColor="Green"></Button>
+            <Button Text="ODŚWIEŻ" FontSize="Header" Clicked="YearRefresh" HorizontalOptions="Fill" BackgroundColor="Grey"></Button>
+            <ListView x:Name="yearListView">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <StackLayout Orientation="Horizontal">
+                                <Label Text="Rok:" Margin="30, 0" FontSize="Medium"></Label>
+                                <Label Text="{Binding rok}" FontSize="Medium"/>
+                                <Button Text="X" Clicked="DeleteYearButton_Clicked" HorizontalOptions="EndAndExpand"/>
+                            </StackLayout>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            </StackLayout>
+        </ContentPage>
+
+        <ContentPage Title="Zajęcia">
+            <StackLayout>
+            <Button Text="DODAJ PRZEDMIOT" FontSize="Header" Clicked="AddLectureButton" HorizontalOptions="Fill" BackgroundColor="Green"></Button>
+            <Button Text="ODŚWIEŻ" FontSize="Header" Clicked="LectureRefresh" HorizontalOptions="Fill" BackgroundColor="Grey"></Button>
+            <ListView x:Name="lecturesListView">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <StackLayout Orientation="Horizontal">
+                                <Label Text="Nazwa przedmiotu:" Margin="30, 0" FontSize="Medium"></Label>
+                                <Label Text="{Binding nazwa}" FontSize="Medium"/>
+                                <Label Text="Rok: " FontSize="Medium" Margin="30, 0"></Label>
+                                <Label Text="{Binding rok}" FontSize="Medium"/>
+                                <Button Text="X" Clicked="DeleteLectureButton_Clicked" HorizontalOptions="EndAndExpand"/>
+                            </StackLayout>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            </StackLayout>
+        </ContentPage>
+    </TabbedPage.Children>
+</TabbedPage>

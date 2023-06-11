@@ -21,14 +21,15 @@ public partial class EditLectureForm : ContentPage
     }
     private async void PotwierdzButton_Clicked(object sender, EventArgs e)
     {
-        var response = await DisplayAlert("Potwierdzenie", "Czy na pewno chcesz edytować?", "Tak", "Anuluj");
+        /*var response = await DisplayAlert("Potwierdzenie", "Czy na pewno chcesz edytować?", "Tak", "Anuluj");
 
         if (response)
-        {
+        {*/
             var students = DatabaseHandler.GetStudentsByLecture(lecture.nazwa);
-            DatabaseHandler.EditLectureByStudentList(students, lecture.nazwa, NazwaEntry.Text, lecture.tag, TagEntry.Text, lecture.rok, Convert.ToInt32(RokPicker.SelectedItem.ToString()));
+            var rok = RokPicker.SelectedItem as Year;
+            DatabaseHandler.EditLecture(lecture.nazwa, NazwaEntry.Text, lecture.tag, TagEntry.Text, lecture.rok, rok.id);
             Navigation.PopAsync();
-        }
+        //}
     }
 
 }

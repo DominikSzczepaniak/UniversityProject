@@ -12,5 +12,6 @@ public partial class AddStudentForm : ContentPage
         string lastName = lastNameEntry.Text;
         DateTime birthDate = birthDatePicker.Date;
         DatabaseHandler.AddStudent(firstName, lastName, birthDate);
+        Navigation.PopAsync();
     }
 }

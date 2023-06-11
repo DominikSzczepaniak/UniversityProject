@@ -23,25 +23,26 @@ public partial class AddYearForm : ContentPage
     private void ConfirmButton_Clicked(object sender, EventArgs e)
     {
         string selectedStudentName = studentPicker.SelectedItem.ToString();
-        int year;
-
-        if (int.TryParse(yearEntry.Text, out year))
+        int year = 0;
+        try
         {
-            Student selectedStudent = students.Find(student =>
-                $"{student.imie} {student.nazwisko}" == selectedStudentName);
+            year = Convert.ToInt32(yearEntry.Text.ToString());
+        }
+        catch(Exception f)
+        {
+            DisplayAlert("BŁĄD", "Niepoprawny rok!", "OK");
+        }
+        Student selectedStudent = students.Find(student =>
+            $"{student.imie} {student.nazwisko}" == selectedStudentName);
 
-            if (selectedStudent != null)
-            {
-                DatabaseHandler.AddYear(year, selectedStudent.id);
-            }
-            else
-            {
-                DisplayAlert("Błąd", "Nie wybrano poprawnego studenta", "OK");
-            }
+        if (selectedStudent != null)
+        {
+            DatabaseHandler.AddYear(year, selectedStudent.id);
+            Navigation.PopAsync();
         }
         else
         {
-            DisplayAlert("Błąd", "Niepoprawny rok studiów", "OK");
+            DisplayAlert("Błąd", "Nie wybrano poprawnego studenta", "OK");
         }
     }
 }

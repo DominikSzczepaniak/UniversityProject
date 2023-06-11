@@ -14,13 +14,14 @@ public partial class EditYearForm : ContentPage
     }
     private async void PotwierdzButton_Clicked(object sender, EventArgs e)
     {
-        var response = await DisplayAlert("Potwierdzenie", "Czy na pewno chcesz edytować?", "Tak", "Anuluj");
+        /*var response = await DisplayAlert("Potwierdzenie", "Czy na pewno chcesz edytować?", "Tak", "Anuluj");
 
         if (response)
-        {
-            var students = DatabaseHandler.GetStudentsByYear(year.rok);
-            DatabaseHandler.EditYearByStudentList(students, year.rok, Convert.ToInt32(RokEntry.Text));
+        {*/
+            var students = DatabaseHandler.GetStudentsByYear(year.id);
+            var rok = Convert.ToInt32(RokEntry.Text);
+            DatabaseHandler.EditYear(year.rok, rok);
             Navigation.PopAsync();
-        }
+        //}
     }
 }
