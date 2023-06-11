@@ -21,7 +21,7 @@
                             BackgroundColor="White"
                             TextColor="Green"
                             PlaceholderColor="Grey"/>
-        <StackLayout Grid.Row="1" Grid.Column="0">
+        <StackLayout Grid.Row="2" Grid.Column="0">
             
             <controls:Picker Title="Wybierz"
                                 x:Name="DataSelector"
@@ -37,31 +37,32 @@
                 </controls:Picker.ItemsSource>
             </controls:Picker>
         </StackLayout>
-        <Button Grid.Row="1" Grid.Column="1" Text="" x:Name="SecondColumn" BackgroundColor="White" TextColor="Black" BorderWidth="0.8" BorderColor="#D7D7D7">
+        <Button Grid.Row="2" Grid.Column="1" Text="" x:Name="SecondColumn" BackgroundColor="White" TextColor="Black" BorderWidth="0.8" BorderColor="#D7D7D7">
         </Button>
-        <Button Grid.Row="1" Grid.Column="2" Text="" x:Name="ThirdColumn" BackgroundColor="White" TextColor="Black" BorderWidth="0.8" BorderColor="#D7D7D7">
+        <Button Grid.Row="2" Grid.Column="2" Text="" x:Name="ThirdColumn" BackgroundColor="White" TextColor="Black" BorderWidth="0.8" BorderColor="#D7D7D7">
         </Button>
 
-         <!--Lewe pole--> 
-        <StackLayout Grid.Column="0" Grid.Row="2">
+         <!--Lewe pole-->
+
+        <StackLayout Grid.Column="0" Grid.Row="3">
             <ListView x:Name="FirstList" ItemSelected="FirstListItemSelected"/>
         </StackLayout>
          <!--Srodkowe pole--> 
-        <StackLayout Grid.Column="1" Grid.Row="2">
+        <StackLayout Grid.Column="1" Grid.Row="3">
             <ListView x:Name="SecondList" IsVisible="false" ItemSelected="SecondListItemSelected" />
             
         </StackLayout>
 
          <!--Prawe pole--> 
-        <StackLayout Grid.Column="2" Grid.Row="2">
+        <StackLayout Grid.Column="2" Grid.Row="3">
             <ListView x:Name="ThirdList" IsVisible="false" ItemSelected="ThirdListItemSelected"/>
         </StackLayout>
 
-        <Button x:Name="StudentAdd" Text="Dodaj studenta" Clicked="StudentAdd_Clicked" Grid.Row="3"  Grid.Column="0" VerticalOptions="End" >
+        <Button x:Name="StudentAdd" Text="Dodaj studenta" Clicked="StudentAdd_Clicked" Grid.Row="1"  Grid.Column="0" VerticalOptions="End" >
         </Button>
-        <Button x:Name="YearAdd" Text="Dodaj rok" Clicked="YearAdd_Clicked" Grid.Row="3" Grid.Column="1" VerticalOptions="End" >
+        <Button x:Name="YearAdd" Text="Dodaj rok" Clicked="YearAdd_Clicked" Grid.Row="1" Grid.Column="1" VerticalOptions="End" >
         </Button>
-        <Button x:Name="LectureAdd" Text="Dodaj przedmiot" Clicked="LectureAdd_Clicked" Grid.Row="3" Grid.Column="2" VerticalOptions="End" >
+        <Button x:Name="LectureAdd" Text="Dodaj przedmiot" Clicked="LectureAdd_Clicked" Grid.Row="1" Grid.Column="2" VerticalOptions="End" >
         </Button>
     </Grid>
 

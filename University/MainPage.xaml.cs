@@ -196,6 +196,7 @@ public partial class MainPage : ContentPage
         a1.getData(DatabaseHandler.GetStudents(), DatabaseHandler.GetYears());
         await Navigation.PushAsync(a1);
     }
+    
 }
 
 public class Student
