@@ -17,6 +17,8 @@ public partial class MainPage : ContentPage
     public ObservableCollection<Student> Students { get; set; }
     public ObservableCollection<Year> Years { get; set; }
     public ObservableCollection<Lecture> Lectures { get; set; }
+    public bool IsChecked1 { get; set; }
+    public bool IsChecked2 { get; set; }
     public MainPage()
     {
 
@@ -121,7 +123,7 @@ public partial class MainPage : ContentPage
             else if (selectedItem == "Rok")
             {
                 var year = FirstList.SelectedItem as Year;
-                DatabaseHandler.DeleteYear(year.id);
+                DatabaseHandler.DeleteYear(year.rok);
             }
             DataSelectorChanged(sender, e);
             return;
@@ -193,7 +195,7 @@ public partial class MainPage : ContentPage
             {
                 //usun rok
                 var year = SecondList.SelectedItem as Year;
-                DatabaseHandler.DeleteYear(year.id);
+                DatabaseHandler.DeleteYear(year.rok);
             }
             else if (selectedItem == "Rok")
             {
@@ -270,7 +272,17 @@ public partial class MainPage : ContentPage
         a1.getData(DatabaseHandler.GetStudents(), DatabaseHandler.GetYears());
         await Navigation.PushAsync(a1);
     }
-    
+    private void CheckBox_CheckedChanged(object sender, CheckedChangedEventArgs e)
+    {
+        if (e.Value && sender == EditRadioButton)
+        {
+            DeleteRadioButton.IsChecked = false;
+        }
+        else if (e.Value && sender == DeleteRadioButton)
+        {
+            EditRadioButton.IsChecked = false;
+        }
+    }
 }
 
 public class Student

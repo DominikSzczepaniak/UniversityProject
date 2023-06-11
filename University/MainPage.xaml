@@ -23,11 +23,11 @@
                         PlaceholderColor="Grey"/>
         <StackLayout Grid.Row="1" Grid.ColumnSpan="3" Orientation="Horizontal">
             <StackLayout HorizontalOptions="StartAndExpand" Margin="280, 0">
-                <RadioButton x:Name="EditRadioButton" GroupName="EditDeleteGroup"/>
+                <CheckBox x:Name="EditRadioButton" CheckedChanged="CheckBox_CheckedChanged"/>
                 <Label Text="Edit"/>
             </StackLayout>
             <StackLayout HorizontalOptions="EndAndExpand"  Margin="280, 0">
-                <RadioButton x:Name="DeleteRadioButton" GroupName="EditDeleteGroup"/>
+                <CheckBox x:Name="DeleteRadioButton" CheckedChanged="CheckBox_CheckedChanged"/>
                 <Label Text="Delete"/>
             </StackLayout>
         </StackLayout>

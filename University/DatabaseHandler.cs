@@ -62,10 +62,9 @@ namespace University
             string DeleteStudentQuery = "DELETE FROM student WHERE id = @id";
             connection.ExecuteScalar(DeleteStudentQuery, new { id = id });
         }
-        public static void DeleteYear(int id)
-        {
-            string DeleteYearQuery = "DELETE FROM year WHERE id = @id";
-            connection.ExecuteScalar(DeleteYearQuery, new { id = id });
+        public static void DeleteYear(int rok){
+            string DeleteYearQuery = "DELETE FROM year WHERE rok = @rok";
+            connection.ExecuteScalar(DeleteYearQuery, new { rok = rok });
         }
         public static void DeleteLecture(int id)
         {
