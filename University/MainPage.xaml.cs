@@ -73,6 +73,20 @@ public partial class MainPage : ContentPage
                 break;
         }
     }
+    private async void EditLect(Lecture selectedLecture)
+    {
+        var a1 = new EditLectureForm();
+        a1.getData(selectedLecture);
+        await Navigation.PushAsync(a1);
+
+    }
+    private async void EditYear(Year selectedYear)
+    {
+        var a1 = new EditYearForm();
+        a1.getData(selectedYear);
+        await Navigation.PushAsync(a1);
+        
+    }
     private void FirstListItemSelected(object sender, EventArgs e)
     {
         SecondList.IsVisible = false;
@@ -80,7 +94,39 @@ public partial class MainPage : ContentPage
         SecondColumn.Text = "";
         ThirdColumn.Text = "";
         var selectedItem = DataSelector.SelectedItem as string;
-        if(selectedItem == "Student")
+        if (EditRadioButton.IsChecked)
+        {
+            if (selectedItem == "Student")
+            {
+                //open window
+            }
+            else if (selectedItem == "Przedmiot")
+            {
+                EditLect(FirstList.SelectedItem as Lecture);
+            }
+            else if (selectedItem == "Rok")
+            {
+                EditYear(FirstList.SelectedItem as Year);
+            }
+            return;
+        }
+
+        if (DeleteRadioButton.IsChecked)
+        {
+            if (selectedItem == "Przedmiot")
+            {
+                var lect = FirstList.SelectedItem as Lecture;
+                DatabaseHandler.DeleteLecture(lect.id);
+            }
+            else if (selectedItem == "Rok")
+            {
+                var year = FirstList.SelectedItem as Year;
+                DatabaseHandler.DeleteYear(year.id);
+            }
+            DataSelectorChanged(sender, e);
+            return;
+        }
+        if (selectedItem == "Student")
         {
             Student selectedStudent = FirstList.SelectedItem as Student;
             //open window with details about student
@@ -129,6 +175,34 @@ public partial class MainPage : ContentPage
         ThirdList.IsVisible=false;
         ThirdColumn.Text = "";
         var selectedItem = DataSelector.SelectedItem as string;
+        if (EditRadioButton.IsChecked)
+        {
+            if (selectedItem == "Przedmiot")
+            {
+                EditYear(SecondList.SelectedItem as Year);
+            }
+            else if (selectedItem == "Rok")
+            {
+                EditLect(SecondList.SelectedItem as Lecture);
+            }
+            return;
+        }
+        if (DeleteRadioButton.IsChecked)
+        {
+            if (selectedItem == "Przedmiot")
+            {
+                //usun rok
+                var year = SecondList.SelectedItem as Year;
+                DatabaseHandler.DeleteYear(year.id);
+            }
+            else if (selectedItem == "Rok")
+            {
+                var lect = SecondList.SelectedItem as Lecture;
+                DatabaseHandler.DeleteYear(lect.id);
+            }
+            FirstListItemSelected(sender, e);
+            return;
+        }
         if (selectedItem == "Rok")
         {
             Year selectedYear = FirstList.SelectedItem as Year;

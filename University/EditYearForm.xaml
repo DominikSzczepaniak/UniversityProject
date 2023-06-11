@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="University.EditYearForm"
+             Title="EditYearForm">
+    <StackLayout Padding="20">
+        <Label Text="Edycja roku" FontSize="20" HorizontalOptions="Center"/>
+
+        <Label Text="Rok:"  />
+        <Entry x:Name="RokEntry"  />
+
+        <Button Text="Potwierdź" Clicked="PotwierdzButton_Clicked" />
+    </StackLayout>
+</ContentPage>

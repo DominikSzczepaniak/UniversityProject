@@ -137,6 +137,22 @@ namespace University
             string GetStudentsByYearAndLectureQuery = "SELECT * FROM student WHERE id IN (SELECT id_studenta FROM lecture WHERE rok = @rok AND nazwa = @nazwa)";
             return connection.Query<Student>(GetStudentsByYearAndLectureQuery, new { rok = rok, nazwa = nazwa }).ToList();
         }
+        public static void EditLectureByStudentList(List<Student> students, string oldName, string newName, string oldTag, string newTag, int oldRok, int newRok)
+        {
+            foreach (Student student in students)
+            {
+                string EditLectureByStudentListQuery = "UPDATE lecture SET nazwa = @newName, tag = @newTag, rok = @newRok WHERE id_studenta = @id_studenta AND nazwa = @oldName AND tag = @oldTag AND rok = @oldRok";
+                connection.ExecuteScalar(EditLectureByStudentListQuery, new { id_studenta = student.id, oldName = oldName, newName = newName, oldTag = oldTag, newTag = newTag, oldRok = oldRok, newRok = newRok });
+            }
+        }
+        public static void EditYearByStudentList(List<Student> students, int oldRok, int newRok)
+        {
+            foreach (Student student in students)
+            {
+                string EditYearByStudentListQuery = "UPDATE year SET rok = @newRok WHERE id_studenta = @id_studenta AND rok = @oldRok";
+                connection.ExecuteScalar(EditYearByStudentListQuery, new { id_studenta = student.id, oldRok = oldRok, newRok = newRok });
+            }
+        }
 
     }
 

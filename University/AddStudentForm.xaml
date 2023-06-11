@@ -6,6 +6,7 @@
     <StackLayout Padding="20">
         <Entry x:Name="firstNameEntry" Placeholder="Imię" />
         <Entry x:Name="lastNameEntry" Placeholder="Nazwisko" />
+        <Label Text="Data urodzenia studenta:"></Label>
         <DatePicker x:Name="birthDatePicker" />
         <Button x:Name="confirmButton" Text="Potwierdź" Clicked="ConfirmButton_Clicked" />
     </StackLayout>
